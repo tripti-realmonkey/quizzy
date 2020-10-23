@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon.png">
+    <title>Quizzy Dashboard</title>
+    <!-- chartist CSS -->
+    <link href="assets/libs/chartist/dist/chartist.min.css" rel="stylesheet">
+    <link href="assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.css" rel="stylesheet">
+    <link href="dist/css/style.css" rel="stylesheet">
+    <!-- This page CSS -->
+    <link href="dist/css/pages/dashboard1.css" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-analytics.js"></script>
+<script  src="https://www.gstatic.com/firebasejs/7.21.1/firebase-database.js"></script>
+<script  src="https://www.gstatic.com/firebasejs/7.21.1/firebase-auth.js"></script>
+<script  src="https://www.gstatic.com/firebasejs/7.21.1/firebase-storage.js"></script>
+<script src="index.js"></script>
+<script>
+    
+var url = window.location.href;
+if(url.indexOf('?id=') != -1)
+{
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    var ref=db.ref('categories/'+id);
+    ref.on("value", function(snapshot) {
+      
+        var cat=snapshot.val();
+        document.getElementById('datakey').value=id;
+        document.getElementById('catname').value=cat.cat;
+        
+       
+
+
+        document.addEventListener('submit',function(e){
+            e.preventDefault();
+            var ref=db.ref('categories'); 
+           
+            var totalcategories=0;
+            ref.once("value")
+            .then(function(snapshot) { 
+               
+                if (snapshot.hasChild(id)) {
+                    updatecat(id);
+                }
+            
+                function updatecat(num){
+                       
+                if (snapshot.hasChild(num)) {
+            
+                    var qname=document.getElementById('catname').value;  
+                
+                    ref.child(num+'/cat').set(qname);   
+
+                    document.getElementById("smessage").innerHTML ="Updated Successfully!";
+                    setTimeout(function(){
+                        document.getElementById("smessage").innerHTML ="";
+                    },2000);
+                }
+                }
+
+            });
+
+    
+
+
+});
+    });
+}
+else{
+    document.addEventListener('submit',function(e){
+    e.preventDefault();
+    
+
+
+    var ref=db.ref('categories');
+
+    
+    
+    var totalcategories=0;
+    ref.once("value")
+    .then(function(snapshot) {
+        totalcategories=parseInt(snapshot.numChildren())+parseInt(1); 
+        if (snapshot.hasChild('cat'+totalcategories)) {
+        var cond=1;
+        do {       
+            totalcategories++;
+            // console.log("cat="+totalcategories);
+            if (!snapshot.hasChild('cat'+totalcategories)) { cond=0;
+            // console.log('childadded'+totalcategories);
+            addcat(totalcategories);
+            }
+        }
+        while (cond == 1);      
+        }
+        else{
+            addcat(totalcategories);
+        }
+    
+        function addcat(num){
+
+        if (!snapshot.hasChild('cat'+num)) {
+    
+            var qname=document.getElementById('catname').value;
+        
+    
+        
+            ref.child('cat'+num+'/cat').set(qname);
+
+            document.getElementById("smessage").innerHTML ="Added Successfully!";
+            setTimeout(function(){
+                document.getElementById("smessage").innerHTML ="";
+                document.getElementById("add_cat").reset();
+            },2000);
+            
+        }
+        }
+
+    })
+
+
+    //setTimeout(function(){  document.getElementById("add_cat").reset(); }, 2000);
+
+
+
+    // console.log("name="+qname+"<br> type="+type+"<br> categories="+categories+" <br> limit="+timelimit+ "<br> points="+points+"<br> option1"+option1+"<br> selcted"+selcted);
+    return false;
+    });
+}
+</script>
+</head>
+
+<body>
+    <div class="main-wrapper" id="main-wrapper">
+        <!-- ============================================================== -->
+        <!-- Preloader - style you can find in spinners.css -->
+        <!-- ============================================================== -->
+        <div class="preloader">
+            <div class="loader">
+                <div class="loader__figure"></div>
+                <p class="loader__label"></p>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- Preloader - style you can find in spinners.css -->
+        <!-- ============================================================== -->
+        <header class="topbar">
+            <!-- ============================================================== -->
+            <!-- Navbar scss in header.scss -->
+            <!-- ============================================================== -->
+            <nav>
+                <div class="nav-wrapper">
+                    <!-- ============================================================== -->
+                    <!-- Logo you can find that scss in header.scss -->
+                    <!-- ============================================================== -->
+                    <a href="javascript:void(0)" class="brand-logo">
+                        <span class="icon">
+                            <img class="light-logo" src="assets/images/logo-light-icon.png">
+                            <img class="dark-logo" src="assets/images/logo-icon.png">
+                        </span>
+                        <span class="text">
+                            <img class="light-logo" src="assets/images/logo-light-text.png">
+                            <img class="dark-logo" src="assets/images/logo-text.png">
+                        </span>
+                    </a>
+                  
+                    <ul class="left">
+                        <li class="hide-on-med-and-down">
+                            <a href="javascript: void(0);" class="nav-toggle">
+                                <span class="bars bar1"></span>
+                                <span class="bars bar2"></span>
+                                <span class="bars bar3"></span>
+                            </a>
+                        </li>
+                        <li class="hide-on-large-only">
+                            <a href="javascript: void(0);" class="sidebar-toggle">
+                                <span class="bars bar1"></span>
+                                <span class="bars bar2"></span>
+                                <span class="bars bar3"></span>
+                            </a>
+                        </li>
+                        
+                    </ul>
+                  
+                    <ul class="right">
+                        
+                        
+                        <li><a class="dropdown-trigger" href="javascript: void(0);" data-target="user_dropdown"><img src="assets/images/users/2.jpg" alt="user" class="circle profile-pic"></a>
+                            <ul id="user_dropdown" class="mailbox dropdown-content dropdown-user">
+                                <li>
+                                    <div class="dw-user-box">
+                                        <div class="u-img"><img src="assets/images/users/2.jpg" alt="user"></div>
+                                        <div class="u-text">
+                                            <h4>Steve Harvey</h4>
+                                            <p>steve@gmail.com</p>
+                                            <a href="profile.html" class="waves-effect waves-light btn-small red white-text">View Profile</a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="profile.html"><i class="material-icons">account_circle</i> My Profile</a></li>
+                               <!--  <li><a href="#"><i class="material-icons">account_balance_wallet</i> My Balance</a></li>
+                                <li><a href="#"><i class="material-icons">inbox</i> Inbox</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#"><i class="material-icons">settings</i> Account Setting</a></li> -->
+                                <li role="separator" class="divider"></li>
+                                <li><a href="login.html"><i class="material-icons">power_settings_new</i> Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <!-- ============================================================== -->
+                    <!-- Right topbar icon scss in header.scss -->
+                    <!-- ============================================================== -->
+                </div>
+            </nav>
+            <!-- ============================================================== -->
+            <!-- Navbar scss in header.scss -->
+            <!-- ============================================================== -->
+        </header>
+        <!-- ============================================================== -->
+        <!-- Sidebar scss in sidebar.scss -->
+        <!-- ============================================================== -->
+        <aside class="left-sidebar">
+            <ul id="slide-out" class="sidenav">
+                <li>
+                    <ul class="collapsible">
+                     <!--    <li class="small-cap"><span class="hide-menu">PERSONAL</span></li> -->
+                        <li>
+                            <a href="index.html" class="collapsible-header"><i class="material-icons">dashboard</i><span class="hide-menu"> Dashboard</span></a>
+                            <!-- <div class="collapsible-body">
+                                <ul>
+                                    <li><a href="index.html"><i class="material-icons">adjust</i><span class="hide-menu">Dashboard-1</span></a></li>
+                                    <li><a href="index2.html"><i class="material-icons">adjust</i><span class="hide-menu">Dashboard-2</span></a></li>
+                                    <li><a href="index3.html"><i class="material-icons">adjust</i><span class="hide-menu">Dashboard-3</span></a></li>
+                                    <li><a href="index4.html"><i class="material-icons">adjust</i><span class="hide-menu">Dashboard-4</span></a></li>
+                                </ul>
+                            </div> -->
+                        </li>
+                        <li>
+                            <a href="javascript: void(0);" class="collapsible-header has-arrow"><i class="material-icons">apps</i><span class="hide-menu"> Quiz Management</span></a>                            
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a href="#addquizmodal" class="modal-trigger"><i class="material-icons">assignment</i><span class="hide-menu">Add New</span></a></li>
+                                    <li><a href="quiz.html"><i class="material-icons">assignment</i><span class="hide-menu">Quiz</span></a></li>
+                                 </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="users.html" class="collapsible-header"><i class="material-icons">group</i><span class="hide-menu"> User Management</span></a>
+                        </li>
+                        <li>
+                            <a href="javascript: void(0);" class="collapsible-header has-arrow"><i class="material-icons">receipt</i><span class="hide-menu"> Categories</span></a>                            
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a href="addcat.html"><i class="material-icons">receipt</i><span class="hide-menu">Add New</span></a></li>
+                                    <li><a href="categories.html"><i class="material-icons">receipt</i><span class="hide-menu">Categories</span></a></li>
+                                 </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="javascript: void(0);" class="collapsible-header has-arrow"><i class="material-icons">assignment</i><span class="hide-menu"> Tags</span></a>                            
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a href="addtag.html"><i class="material-icons">assignment</i><span class="hide-menu">Add Tag</span></a></li>
+                                    <li><a href="tags.html"><i class="material-icons">assignment</i><span class="hide-menu">Tags</span></a></li>
+                                 </ul>
+                            </div>
+                        </li>
+						<li>
+                            <a href="javascript: void(0);" class="collapsible-header has-arrow"><i class="material-icons">equalizer</i><span class="hide-menu"> Question Bank</span></a>                            
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a href="addquestion.html"><i class="material-icons">adjust</i><span class="hide-menu">Add new Question</span></a></li>
+                                    <li><a href="questions.html"><i class="material-icons">adjust</i><span class="hide-menu">Questions</span></a></li>
+                                 </ul>
+                            </div>
+                        </li>
+                        <!-- <li>
+                            <a href="../docs/documentation.html" class="collapsible-header"><i class="material-icons">content_paste</i><span class="hide-menu"> Documentation </span></a>
+                        </li> -->
+                        <li>
+                            <a href="leaderboard.html" class="collapsible-header"><i class="material-icons">directions</i><span class="hide-menu"> Leaderboard </span></a>
+                        </li>
+                       <!--  <li>
+                            <a href="faqs.html" class="collapsible-header"><i class="material-icons">people_outline</i><span class="hide-menu"> FAQs </span></a>
+                        </li> -->
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+        <!-- ============================================================== -->
+        <!-- Sidebar scss in sidebar.scss -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Page wrapper scss in scafholding.scss -->
+        <!-- ============================================================== -->
+        <div class="page-wrapper">
+            <!-- ============================================================== -->
+            <!-- Title and breadcrumb -->
+            <!-- ============================================================== -->
+            <div class="page-titles">
+                <div class="d-flex align-items-center">
+                    <h5 class="font-medium m-b-0">Dashboard</h5>
+                    <div class="custom-breadcrumb ml-auto">
+                        <a href="#!" class="breadcrumb">categories</a>
+                        <a href="#!" class="breadcrumb">Add new</a>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col s12">
+                        <div class="card">
+                            
+                            <form class="h-form" id="add_cat" method="post"  enctype="multipart/form-data">
+
+                                <input type="hidden" id="datakey" name="datakey" />
+                                <div class="form-body">
+                                    <div class="divider"></div>
+                                    <div class="card-content">                                       
+                                        <div class="row">
+                                            <div class="col s3">
+                                                <div class="h-form-label">
+                                                    <label for="catname">Name</label>
+                                                </div>
+                                            </div>
+                                            <div class="input-field col s9">
+                                                <input id="catname" name="catname" type="text" placeholder="Category Name" required />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="divider"></div>
+                                    <div class="card-content">
+                                        <div class="form-action">
+                                            <button class="btn cyan waves-effect waves-light" type="submit" name="action">Save
+                                            </button>
+                                            <button class="btn waves-effect waves-light grey darken-4" type="submit" name="action">Cancel
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                             
+
+                            <p id="smessage"></p>
+                           
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            
+        </div>
+        <!-- ============================================================== -->
+        <!-- Page wrapper scss in scafholding.scss -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Right Sidebar -->
+        <!-- ============================================================== -->
+		
+        <!-- ============================================================== -->
+        <!-- Right Sidebar -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- All Required js -->
+    <!-- ============================================================== -->
+    <script src="assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="dist/js/materialize.min.js"></script>
+    <script src="assets/libs/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.min.js"></script>
+
+    
+
+    <!-- ============================================================== -->
+    <!-- Apps -->
+    <!-- ============================================================== -->
+    <script src="dist/js/app.js"></script>
+    <script src="dist/js/core.js"></script>
+    <script src="dist/js/app.init.dark.js"></script>
+    <script src="dist/js/app-style-switcher.js"></script>
+    <!-- ============================================================== -->
+    <!-- Custom js -->
+    <!-- ============================================================== -->
+    <script src="dist/js/custom.min.js"></script>
+    <!-- ============================================================== -->
+    <!-- This page plugin js -->
+    <!-- ============================================================== -->
+    <script src="assets/libs/chartist/dist/chartist.min.js"></script>
+    <script src="assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
+    <script src="assets/extra-libs/sparkline/sparkline.js"></script>
+    <script src="dist/js/pages/dashboards/dashboard1.js"></script>
+</body>
+</html>

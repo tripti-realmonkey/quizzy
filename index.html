@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon.png">
+    <title>Quizzy Dashboard</title>
+    <!-- chartist CSS -->
+    <link href="assets/libs/chartist/dist/chartist.min.css" rel="stylesheet">
+    <link href="assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.css" rel="stylesheet">
+    <link href="dist/css/style.css" rel="stylesheet">
+    <!-- This page CSS -->
+    <link href="dist/css/pages/dashboard1.css" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-analytics.js"></script>
+<script  src="https://www.gstatic.com/firebasejs/7.21.1/firebase-database.js"></script>
+<script  src="https://www.gstatic.com/firebasejs/7.21.1/firebase-auth.js"></script>
+<script  src="https://www.gstatic.com/firebasejs/7.21.1/firebase-storage.js"></script>
+
+</head>
+
+<body>
+    <script src="index.js"></script>
+    <div class="main-wrapper" id="main-wrapper">
+        <!-- ============================================================== -->
+        <!-- Preloader - style you can find in spinners.css -->
+        <!-- ============================================================== -->
+        <div class="preloader">
+            <div class="loader">
+                <div class="loader__figure"></div>
+                <p class="loader__label"></p>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- Preloader - style you can find in spinners.css -->
+        <!-- ============================================================== -->
+        <header class="topbar">
+            <!-- ============================================================== -->
+            <!-- Navbar scss in header.scss -->
+            <!-- ============================================================== -->
+            <nav>
+                <div class="nav-wrapper">
+                    <!-- ============================================================== -->
+                    <!-- Logo you can find that scss in header.scss -->
+                    <!-- ============================================================== -->
+                    <a href="javascript:void(0)" class="brand-logo">
+                        <span class="icon">
+                            <img class="light-logo" src="assets/images/logo-light-icon.png">
+                            <img class="dark-logo" src="assets/images/logo-icon.png">
+                        </span>
+                        <span class="text">
+                            <img class="light-logo" src="assets/images/logo-light-text.png">
+                            <img class="dark-logo" src="assets/images/logo-text.png">
+                        </span>
+                    </a>
+                  
+                    <ul class="left">
+                        <li class="hide-on-med-and-down">
+                            <a href="javascript: void(0);" class="nav-toggle">
+                                <span class="bars bar1"></span>
+                                <span class="bars bar2"></span>
+                                <span class="bars bar3"></span>
+                            </a>
+                        </li>
+                        <li class="hide-on-large-only">
+                            <a href="javascript: void(0);" class="sidebar-toggle">
+                                <span class="bars bar1"></span>
+                                <span class="bars bar2"></span>
+                                <span class="bars bar3"></span>
+                            </a>
+                        </li>
+                        
+                    </ul>
+                  
+                    <ul class="right">
+                        
+                        
+                        <li><a class="dropdown-trigger" href="javascript: void(0);" data-target="user_dropdown"><img src="assets/images/users/2.jpg" alt="user" class="circle profile-pic"></a>
+                            <ul id="user_dropdown" class="mailbox dropdown-content dropdown-user">
+                                <li>
+                                    <div class="dw-user-box">
+                                        <div class="u-img"><img src="assets/images/users/2.jpg" alt="user"></div>
+                                        <div class="u-text">
+                                            <h4>Steve Harvey</h4>
+                                            <p>steve@gmail.com</p>
+                                            <a href="profile.html" class="waves-effect waves-light btn-small red white-text">View Profile</a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="profile.html"><i class="material-icons">account_circle</i> My Profile</a></li>
+                               <!--  <li><a href="#"><i class="material-icons">account_balance_wallet</i> My Balance</a></li>
+                                <li><a href="#"><i class="material-icons">inbox</i> Inbox</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#"><i class="material-icons">settings</i> Account Setting</a></li> -->
+                                <li role="separator" class="divider"></li>
+                                <li><a href="login.html"><i class="material-icons">power_settings_new</i> Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <!-- ============================================================== -->
+                    <!-- Right topbar icon scss in header.scss -->
+                    <!-- ============================================================== -->
+                </div>
+            </nav>
+            <!-- ============================================================== -->
+            <!-- Navbar scss in header.scss -->
+            <!-- ============================================================== -->
+        </header>
+        <!-- ============================================================== -->
+        <!-- Sidebar scss in sidebar.scss -->
+        <!-- ============================================================== -->
+        <aside class="left-sidebar">
+            <ul id="slide-out" class="sidenav">
+                <li>
+                    <ul class="collapsible">
+                     <!--    <li class="small-cap"><span class="hide-menu">PERSONAL</span></li> -->
+                        <li>
+                            <a href="index.html" class="collapsible-header"><i class="material-icons">dashboard</i><span class="hide-menu"> Dashboard</span></a>
+                            <!-- <div class="collapsible-body">
+                                <ul>
+                                    <li><a href="index.html"><i class="material-icons">adjust</i><span class="hide-menu">Dashboard-1</span></a></li>
+                                    <li><a href="index2.html"><i class="material-icons">adjust</i><span class="hide-menu">Dashboard-2</span></a></li>
+                                    <li><a href="index3.html"><i class="material-icons">adjust</i><span class="hide-menu">Dashboard-3</span></a></li>
+                                    <li><a href="index4.html"><i class="material-icons">adjust</i><span class="hide-menu">Dashboard-4</span></a></li>
+                                </ul>
+                            </div> -->
+                        </li>
+                        <li>
+                            <a href="javascript: void(0);" class="collapsible-header has-arrow"><i class="material-icons">apps</i><span class="hide-menu"> Quiz Management</span></a>                            
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a href="#addquizmodal" class="modal-trigger"><i class="material-icons">assignment</i><span class="hide-menu">Add New</span></a></li>
+                                    <li><a href="quiz.html"><i class="material-icons">assignment</i><span class="hide-menu">Quiz</span></a></li>
+                                 </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="users.html" class="collapsible-header"><i class="material-icons">group</i><span class="hide-menu"> User Management</span></a>
+                        </li>
+                        <li>
+                            <a href="javascript: void(0);" class="collapsible-header has-arrow"><i class="material-icons">receipt</i><span class="hide-menu"> Categories</span></a>                            
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a href="addcat.html"><i class="material-icons">receipt</i><span class="hide-menu">Add New</span></a></li>
+                                    <li><a href="categories.html"><i class="material-icons">receipt</i><span class="hide-menu">Categories</span></a></li>
+                                 </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="javascript: void(0);" class="collapsible-header has-arrow"><i class="material-icons">assignment</i><span class="hide-menu"> Tags</span></a>                            
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a href="addtag.html"><i class="material-icons">assignment</i><span class="hide-menu">Add Tag</span></a></li>
+                                    <li><a href="tags.html"><i class="material-icons">assignment</i><span class="hide-menu">Tags</span></a></li>
+                                 </ul>
+                            </div>
+                        </li>
+
+						<li>
+                            <a href="javascript: void(0);" class="collapsible-header has-arrow"><i class="material-icons">equalizer</i><span class="hide-menu"> Question Bank</span></a>                            
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a href="addquestion.html"><i class="material-icons">adjust</i><span class="hide-menu">Add new Question</span></a></li>
+                                    <li><a href="questions.html"><i class="material-icons">adjust</i><span class="hide-menu">Questions</span></a></li>
+                                 </ul>
+                            </div>
+                        </li>
+                        <!-- <li>
+                            <a href="../docs/documentation.html" class="collapsible-header"><i class="material-icons">content_paste</i><span class="hide-menu"> Documentation </span></a>
+                        </li> -->
+                        <li>
+                            <a href="leaderboard.html" class="collapsible-header"><i class="material-icons">directions</i><span class="hide-menu"> Leaderboard </span></a>
+                        </li>
+                       <!--  <li>
+                            <a href="faqs.html" class="collapsible-header"><i class="material-icons">people_outline</i><span class="hide-menu"> FAQs </span></a>
+                        </li> -->
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+        <!-- ============================================================== -->
+        <!-- Sidebar scss in sidebar.scss -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Page wrapper scss in scafholding.scss -->
+        <!-- ============================================================== -->
+        <div class="page-wrapper">
+            <!-- ============================================================== -->
+            <!-- Title and breadcrumb -->
+            <!-- ============================================================== -->
+            <div class="page-titles">
+                <div class="d-flex align-items-center">
+                    <h5 class="font-medium m-b-0">Dashboard</h5>
+                    <div class="custom-breadcrumb ml-auto">
+                        <a href="#!" class="breadcrumb">Home</a>
+                        <a href="#!" class="breadcrumb">Dashboard</a>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- Container fluid scss in scafholding.scss -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Sales Summery -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col l3 m6 s12">
+                        <div class="card danger-gradient card-hover">
+                            <div class="card-content">
+                                <div class="d-flex no-block align-items-center">
+                                    <div>
+                                        <h2 class="white-text m-b-5">250</h2>
+                                        <h6 class="white-text op-5 light-blue-text">Total Users</h6>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <span class="white-text display-6"><i class="material-icons">assignment</i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col l3 m6 s12">
+                        <div class="card info-gradient card-hover">
+                            <div class="card-content">
+                                <div class="d-flex no-block align-items-center">
+                                    <div>
+                                        <h2 class="white-text m-b-5">200</h2>
+                                        <h6 class="white-text op-5">Active Users</h6>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <span class="white-text display-6"><i class="material-icons">receipt</i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     
+                    
+                    <div class="col l3 m6 s12">
+                        <div class="card success-gradient card-hover">
+                            <div class="card-content">
+                                <div class="d-flex no-block align-items-center">
+                                    <div>
+                                        <h2 class="white-text m-b-5">100</h2>
+                                        <h6 class="white-text op-5 text-darken-2">Total Quizzes</h6>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <span class="white-text display-6"><i class="material-icons">equalizer</i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div class="col l3 m6 s12">
+                        <div class="card warning-gradient card-hover">
+                            <div class="card-content">
+                                <div class="d-flex no-block align-items-center">
+                                    <div>
+                                        <h2 class="white-text m-b-5">450</h2>
+                                        <h6 class="white-text op-5">Total Questions</h6>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <span class="white-text display-6"><i class="material-icons">attach_money</i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- Sales Summery -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col s12 l8">
+                        <!-- product sales anf active users -->
+						<!-- ============================================================== -->
+						<div class="row">
+							<div class="col s12">
+								<div class="card">
+									<div class="card-content">
+										<div class="d-flex align-items-center">
+											<div>
+												<h5 class="card-title">Leaderboard</h5>
+											</div>
+											<div class="ml-auto">
+												<div class="input-field dl support-select">
+												   <!--  <select>
+														<option value="0" selected>10 Mar - 10 Apr</option>
+														<option value="1">10 Apr - 10 May</option>
+														<option value="2">10 May - 10 Jun</option>
+														<option value="3">10 Jun - 10 Jul</option>
+													</select> -->
+												</div>
+											</div>
+										</div>
+										<div class="table-responsive m-b-20">
+											<table class="">
+												<!-- <thead>
+													<tr>
+														<th>Executives</th>
+														<th>Product</th>
+														<th>Price</th>
+														<th>Date</th>
+														<th>Status</th>
+														<th>Progress</th>
+														<th>Sales</th>
+														<th>Earned</th>
+													</tr>
+												</thead> -->
+												<tbody>
+													<tr>
+														<td>
+															<div class="d-flex no-block align-items-center">
+																<div class="m-r-10"><img src="assets/images/users/d1.jpg" alt="user" class="circle" width="45" /></div>
+																<div class="">
+																	<h5 class="m-b-0 font-16 font-medium">Hanna Gover</h5><span>hgover@gmail.com</span></div>
+															</div>
+														</td>
+														<td>
+															<p class="">Elite Admin</p>
+														</td>
+														<td class="blue-grey-text text-darken-4 font-medium">$96K</td>
+														<td>May 23, 2018</td>
+														<td><span class="label label-info">Sale</span></td>
+														
+													</tr>
+													<tr>
+														<td>
+															<div class="d-flex no-block align-items-center">
+																<div class="m-r-10"><img src="assets/images/users/d2.jpg" alt="user" class="circle" width="45" /></div>
+																<div class="">
+																	<h5 class="m-b-0 font-16 font-medium">Daniel Kristeen</h5><span>Kristeen@gmail.com</span></div>
+															</div>
+														</td>
+														<td>
+															<p class="">Real Homes WP Theme</p>
+														</td>
+														<td class="blue-grey-text text-darken-4 font-medium">$85K</td>
+														<td>May 23, 2018</td>
+														<td><span class="label cyan">Extended</span></td>
+														
+													</tr>
+													<tr>
+														<td>
+															<div class="d-flex no-block align-items-center">
+																<div class="m-r-10"><img src="assets/images/users/d3.jpg" alt="user" class="circle" width="45" /></div>
+																<div class="">
+																	<h5 class="m-b-0 font-16 font-medium">Julian Josephs</h5><span>Josephs@gmail.com</span></div>
+															</div>
+														</td>
+														<td>
+															<p class="">MedicalPro WP Theme</p>
+														</td>
+														<td class="blue-grey-text text-darken-4 font-medium">$81K</td>
+														<td>May 23, 2018</td>
+														<td><span class="label label-primary">Multiple</span></td>
+														
+													</tr>
+													<tr>
+														<td>
+															<div class="d-flex no-block align-items-center">
+																<div class="m-r-10"><img src="assets/images/users/2.jpg" alt="user" class="circle" width="45" /></div>
+																<div class="">
+																	<h5 class="m-b-0 font-16 font-medium">Jan Petrovic</h5><span>hgover@gmail.com</span></div>
+															</div>
+														</td>
+														<td>
+															<p class="">HostinPress Html</p>
+														</td>
+														<td class="blue-grey-text text-darken-4 font-medium">-$30K</td>
+														<td>May 23, 2018</td>
+														<td><span class="label label-warning">Tax</span></td>
+														
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- ============================================================== -->
+                    </div>
+                    <div class="col s12 l4">
+                        <div class="card card-hover">
+                            <div class="card-content">
+                                <div class="d-flex align-items-center">
+                                    <div class="m-r-20">
+                                        <h1 class=""><i class="ti-light-bulb"></i></h1></div>
+                                    <div>
+                                        <h3 class="card-title">Sales Analytics</h3>
+                                        <h6 class="card-subtitle">March  2017</h6> </div>
+                                </div>
+                                <div class="row d-flex align-items-center">
+                                    <div class="col s6">
+                                        <h3 class="font-light m-t-10"><sup><small><i class="ti-arrow-up"></i></small></sup>35487</h3>
+                                    </div>
+                                    <div class="col s6 right-align">
+                                        <div class="p-t-10 p-b-10">
+                                            <div class="spark-count" style="height:65px"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card card-hover">
+                            <div class="card-content">
+                                <div class="d-flex align-items-center">
+                                    <div class="m-r-20">
+                                        <h1 class=""><i class="ti-pie-chart"></i></h1></div>
+                                    <div>
+                                        <h3 class="card-title">Bandwidth usage</h3>
+                                        <h6 class="card-subtitle">March  2017</h6> 
+                                    </div>
+                                </div>
+                                <div class="row d-flex align-items-center">
+                                    <div class="col s6">
+                                        <h3 class="font-light m-t-10">50 GB</h3>
+                                    </div>
+                                    <div class="col s6 p-t-10 p-b-20 right-align">
+                                        <div class="p-t-10 p-b-10 m-r-20">
+                                            <div class="spark-count2" style="height:65px"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+               
+                
+                
+            </div>
+            <!-- ============================================================== -->
+            <!-- Container fluid scss in scafholding.scss -->
+            <!-- ============================================================== -->
+            
+        </div>
+        <!-- ============================================================== -->
+        <!-- Page wrapper scss in scafholding.scss -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Right Sidebar -->
+        <!-- ============================================================== -->
+		
+        <!-- ============================================================== -->
+        <!-- Right Sidebar -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- All Required js -->
+    <!-- ============================================================== -->
+    <script src="assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="dist/js/materialize.min.js"></script>
+    <script src="assets/libs/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.min.js"></script>
+    <!-- ============================================================== -->
+    <!-- Apps -->
+    <!-- ============================================================== -->
+    <script src="dist/js/app.js"></script>
+    <script src="dist/js/app.init.dark.js"></script>
+    <script src="dist/js/app-style-switcher.js"></script>
+    <!-- ============================================================== -->
+    <!-- Custom js -->
+    <!-- ============================================================== -->
+    <script src="dist/js/custom.min.js"></script>
+    <!-- ============================================================== -->
+    <!-- This page plugin js -->
+    <!-- ============================================================== -->
+    <script src="assets/libs/chartist/dist/chartist.min.js"></script>
+    <script src="assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
+    <script src="assets/extra-libs/sparkline/sparkline.js"></script>
+    <script src="dist/js/pages/dashboards/dashboard1.js"></script>
+</body>
+</html>
