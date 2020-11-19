@@ -1,6 +1,6 @@
 
 // document.addEventListener('DOMContentLoaded', function() {
-
+  
 //var firebase = require("firebase-admin");
 
 /* var config = {
@@ -9,6 +9,7 @@
     databaseURL: "https://quezzy-realmo.firebaseio.com",
     storageBucket: "gs://quezzy-realmo.appspot.com"
   }; */
+  
   var config = {
     // apiKey: "AIzaSyAI5SMMenVvDwLU2wB-nBy0WOzNTv9T84o",
     // authDomain: "quezzy-realmo.firebaseapp.com",
@@ -19,13 +20,13 @@
     // appId: "1:643937135985:web:b78c0e21f81ac820091ad0",
     // measurementId: "G-46VBGBKT33"
     apiKey: "AIzaSyCYJn4SoRhKkDlBkfAy7D08KCh-O-az4h0",
-  authDomain: "quizzy-a070a.firebaseapp.com",
-  databaseURL: "https://quizzy-a070a.firebaseio.com",
-  projectId: "quizzy-a070a",
-  storageBucket: "quizzy-a070a.appspot.com",
-  messagingSenderId: "214636383156",
-  appId: "1:214636383156:web:fea3d25eddfc4ee57ec0e1",
-  measurementId: "G-ZFJRWE2QYE"
+    authDomain: "quizzy-a070a.firebaseapp.com",
+    databaseURL: "https://quizzy-a070a.firebaseio.com",
+    projectId: "quizzy-a070a",
+    storageBucket: "quizzy-a070a.appspot.com",
+    messagingSenderId: "214636383156",
+    appId: "1:214636383156:web:fea3d25eddfc4ee57ec0e1",
+    measurementId: "G-ZFJRWE2QYE"
   };
   firebase.initializeApp(config);
 
@@ -34,6 +35,7 @@
 
   
   //console.log(db);
+  console.log('Welcome');
   
   
    

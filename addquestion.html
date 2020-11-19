@@ -98,30 +98,28 @@ if(url.indexOf('?id=') != -1)
            // console.log(question.answerkey);           
         }
 
-        var datakey=document.getElementById('datakey').value;
+        
 
-        document.addEventListener('submit',function(e){
-  e.preventDefault();
-  
-  
+        
 
+});
 
-  var ref=db.ref('questions');
+document.addEventListener('submit',function(e){
+            e.preventDefault();
+            var datakey=document.getElementById('datakey').value;
+            var ref=db.ref('questions');
+            var totalQuestions=0;
+            ref.once("value")
+            .then(function(snapshot) { 
+                if (snapshot.hasChild(datakey)) {
+                    updateQuestion(datakey);
+                    console.log('afa')
+                }
+                function updateQuestion(num){
 
- 
-  
-   var totalQuestions=0;
-   ref.once("value")
-   .then(function(snapshot) { 
-    if (snapshot.hasChild(datakey)) {
-        updateQuestion(datakey);
-    }
-  
-    function updateQuestion(num){
+                        if (snapshot.hasChild(num)) {
 
-      if (snapshot.hasChild(num)) {
-  
-        var qname=document.getElementById('questioname').value;
+      var qname=document.getElementById('questioname').value;
       var type=document.getElementById('questiontype').value;
       var level=document.getElementById('questionlevel').value;
       var tags=getSelectValues(document.getElementById('questiontags'));
@@ -130,49 +128,53 @@ if(url.indexOf('?id=') != -1)
       var points=document.getElementById('questionpoints').value;
       var multiplechoice=document.getElementById('multiplechoice');
       var videourl=document.getElementById('videourl').value;
-        var filename=document.getElementById('filename').value;
-        var imgname=document.getElementById('imgname').value;
+      var filename=document.getElementById('filename').value;
+      var imgname=document.getElementById('imgname').value;
       if(multiplechoice.checked == true){
-        var option1=document.getElementById('option1value').value;
-        var option2=document.getElementById('option2value').value;
-        var option3=document.getElementById('option3value').value;
-        var option4=document.getElementById('option4value').value;
-        var selcted=document.querySelector('.correctvalue:checked').value;
-        ref.child(num+'/key').set(selcted);
-         ref.child(num+'/option1').set(option1);
-            ref.child(num+'/option2').set(option2);
-            ref.child(num+'/option3').set(option3);
-            ref.child(num+'/option4').set(option4);
-       // ref.child(num+'/options').set({option1:option1,option2:option2,option3:option3,option4:option4});
+          var option1=document.getElementById('option1value').value;
+          var option2=document.getElementById('option2value').value;
+          var option3=document.getElementById('option3value').value;
+          var option4=document.getElementById('option4value').value;
+          //var selcted=document.querySelector('.correctvalue:checked').value;
+         // ref.child(num+'/key').set(selcted);
+          ref.child(num+'/option1').set(option1);
+              ref.child(num+'/option2').set(option2);
+              ref.child(num+'/option3').set(option3);
+              ref.child(num+'/option4').set(option4);
+      // ref.child(num+'/options').set({option1:option1,option2:option2,option3:option3,option4:option4});
       }
-  
 
-         ref.child(num+'/question').set(qname);     
-         
-         ref.child(num+'/tags').set(tags);
-         ref.child(num+'/cats').set(cats);
-         ref.child(num+'/time').set(timelimit);
-         ref.child(num+'/level').set(level);
-         ref.child(num+'/type').set(type);
-         ref.child(num+'/points').set(points);
-         ref.child(num+'/videourl').set(videourl);
-            ref.child(num+'/imgurl').set(filename);
-            ref.child(num+'/fileName').set(imgname);
-        ref.child(num+'/updated_at').set(Math.round(new Date().getTime()/1000));
 
-        var currentdate = new Date(); 
-        var datetime =  currentdate.getDate() + "/"
-                + (currentdate.getMonth()+1)  + "/" 
-                + currentdate.getFullYear() + " @ "  
-                + currentdate.getHours() + ":"  
-                + currentdate.getMinutes();       
+      ref.child(num+'/question').set(qname);     
+      
+      ref.child(num+'/tags').set(tags);
+      ref.child(num+'/cats').set(cats);
+      ref.child(num+'/time').set(timelimit);
+      ref.child(num+'/level').set(level);
+      ref.child(num+'/type').set(type);
+      ref.child(num+'/points').set(points);
+      ref.child(num+'/videourl').set(videourl);
+      ref.child(num+'/imgurl').set(filename);
+      ref.child(num+'/fileName').set(imgname);
+      var now = new Date;
+      var timeStamp = Date.UTC(   now.getUTCFullYear(),now.getUTCMonth(), now.getUTCDate() , 
+                                        now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+      ref.child(num+'/updated_at').set(timeStamp);
+      ref.child(num+'/version').set(timeStamp);
+      db.ref('Version').child('qbankVersion').set(timeStamp);
+      var currentdate = new Date(); 
+      var datetime =  currentdate.getDate() + "/"
+          + (currentdate.getMonth()+1)  + "/" 
+          + currentdate.getFullYear() + " @ "  
+          + currentdate.getHours() + ":"  
+          + currentdate.getMinutes();       
       //  ref.child(num+'updated_at').set(Math.round(new Date().getTime()/1000));
-         document.getElementById("smessage").innerHTML ="Updated Successfully!";
-         setTimeout(function(){
-            document.getElementById("smessage").innerHTML ="";
-         },2000);
-      }
-    }
+   document.getElementById("smessage").innerHTML ="Updated Successfully!";
+   setTimeout(function(){
+      document.getElementById("smessage").innerHTML ="";
+   },2000);
+}
+                }
 
   });
 
@@ -180,8 +182,6 @@ if(url.indexOf('?id=') != -1)
 }, function (errorObject) {
         
    
-
-});
 
 });
 }
@@ -262,7 +262,14 @@ else{
             ref.child('Questions'+num+'/videourl').set(videourl);
             ref.child('Questions'+num+'/imgurl').set(filename);
             ref.child('Questions'+num+'/fileName').set(imgname);
-             ref.child('Questions'+num+'/updated_at').set(Math.round(new Date().getTime()/1000));
+            var now = new Date;
+            var timeStamp = Date.UTC(   now.getUTCFullYear(),now.getUTCMonth(), now.getUTCDate() , 
+                                        now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+            ref.child('Questions'+num+'/updated_at').set(timeStamp);
+            ref.child('Questions'+num+'/version').set(timeStamp);
+            console.log('timequesbank = ', timeStamp)
+            db.ref('Version').child('qbankVersion').set(timeStamp);
+
             document.getElementById("smessage").innerHTML ="Added Successfully!";
             setTimeout(function(){
                 document.getElementById("smessage").innerHTML ="";
@@ -390,7 +397,7 @@ else{
                             <a href="javascript: void(0);" class="collapsible-header has-arrow"><i class="material-icons">apps</i><span class="hide-menu"> Quiz Management</span></a>                            
                             <div class="collapsible-body">
                                 <ul>
-                                    <li><a href="#addquizmodal" class="modal-trigger"><i class="material-icons">assignment</i><span class="hide-menu">Add New</span></a></li>
+                                    <li><a href="addquiz.html" class="modal-trigger"><i class="material-icons">assignment</i><span class="hide-menu">Add New</span></a></li>
                                     <li><a href="quiz.html"><i class="material-icons">assignment</i><span class="hide-menu">Quiz</span></a></li>
                                  </ul>
                             </div>

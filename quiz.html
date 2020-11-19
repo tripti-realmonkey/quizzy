@@ -162,7 +162,7 @@
                             <a href="javascript: void(0);" class="collapsible-header has-arrow"><i class="material-icons">apps</i><span class="hide-menu"> Quiz Management</span></a>                            
                             <div class="collapsible-body">
                                 <ul>
-                                    <li><a href="#addquizmodal" class="modal-trigger"><i class="material-icons">assignment</i><span class="hide-menu">Add New</span></a></li>
+                                    <li><a href="addquiz.html" class="modal-trigger"><i class="material-icons">assignment</i><span class="hide-menu">Add New</span></a></li>
                                     <li><a href="quiz.html"><i class="material-icons">assignment</i><span class="hide-menu">Quiz</span></a></li>
                                  </ul>
                             </div>
@@ -247,6 +247,9 @@
                                     <thead>
                                         <tr>
                                             <th>Quiz Title</th>
+                                            <th>Level</th>
+                                            <th>Category</th>
+                                            <th>Tags</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -258,6 +261,16 @@
                                                 var key="'"+data.key+"'";
                                                 html +='<tr>'+
                                                     '<td>'+data.val().title+'</td>'+
+                                                    '<td>'+data.val().quiz_level+'</td>'+
+                                                    '<td>'+data.val().category+'</td>';
+                                                 
+                                                    var parsed = data.val().tags;
+                                                    var tagsArr = [];
+                                                    console.log(parsed); 
+                                                    for(var i in parsed) 
+                                                        tagsArr.push(parsed[i]);
+                                                      
+                                                 html +='<td>'+tagsArr+'</td>'+
                                                     '<td><a href="/questions.html?qid='+data.key+'"><i class="material-icons dp48">mode_edit</i></a>  <a href="javascript:void(0)"  class="delnode" '+
                                                         'onclick="firedeletenode('+key+')" ><i class="material-icons dp48">delete</i></a></td>'+
                                                     '</tr>';
